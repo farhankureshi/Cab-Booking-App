@@ -1,0 +1,26 @@
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: always
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/cabdb
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-this-secret-key-change-this-secret-key-1234567890}
+    expiry-minutes: 1440
+  fare:
+    base: 50
+    per-km: 12
+    minimum: 80
+  stripe:
+    secret-key: ${STRIPE_SECRET_KEY:}
+    publishable-key: ${STRIPE_PUBLISHABLE_KEY:}
+    webhook-secret: ${STRIPE_WEBHOOK_SECRET:}
+    currency: inr

@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: cabdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes: [pgdata:/var/lib/postgresql/data]
+  app:
+    build: .
+    depends_on: [db]
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      DB_URL: jdbc:postgresql://db:5432/cabdb
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: ${JWT_SECRET:-change-this-secret-key-change-this-secret-key-1234567890}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+  nginx:
+    image: nginx:1.27
+    depends_on: [app]
+    ports: ["80:80"]
+    volumes: ["./nginx.conf:/etc/nginx/conf.d/default.conf:ro"]
+volumes:
+  pgdata:
